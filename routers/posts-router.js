@@ -52,4 +52,21 @@ router.post("/", async (req, res) => {
     res.status(500).json({ message: "Your post could not be added!" });
   }
 });
+
+//Deletes id as long as its greater than 0
+
+router.delete("/:id", async (req, res) => {
+  try {
+    const count = await Posts.remove(req.params.id);
+    if (count > 0) {
+      res.status(200).json({ message: "That post has been nuked!" });
+    } else {
+      res.status(404).json({ message: "That post could not be found!" });
+    }
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: "There was an error removing that post!" });
+  }
+});
+
 module.exports = router;
