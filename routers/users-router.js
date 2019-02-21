@@ -6,8 +6,7 @@ const router = express.Router();
 router.use(upperCaser);
 
 function upperCaser(req, res, next) {
-  const upperCaseName = (req.body.name || " ").toUpperCase();
-  req.body.name = upperCaseName;
+  req.body.name = (req.body.name || " ").toUpperCase();
   next();
 }
 
