@@ -3,12 +3,11 @@ const express = require("express");
 const db = require("../data/helpers/userDb");
 
 const router = express.Router();
-router.use(upperCaser);
 
-function upperCaser(req, res, next) {
-  req.body.name = (req.body.name || " ").toUpperCase();
+const allCaps = (req, res, next) => {
+  Object.assign(req.body, { name: req.body.name.toUpperCase() });
   next();
-}
+};
 
 //get users
 
@@ -66,7 +65,7 @@ router.get("/:id/posts", async (req, res) => {
 
 /// Create a new user
 
-router.post("/", async (req, res) => {
+router.post("/", allCaps, async (req, res) => {
   if (!req.body.name) {
     res.status(400).json({ error: "Please provide a name for the user." });
     return;
@@ -102,7 +101,7 @@ router.delete("/:id", async (req, res) => {
 
 //Needs to be able to update a given user
 
-router.put("/:id", async (req, res) => {
+router.put("/:id", allCaps, async (req, res) => {
   if (!req.body.name) {
     res.status(400).json({ error: "Doh! The user must have a name" });
     return;
