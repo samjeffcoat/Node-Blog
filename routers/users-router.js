@@ -37,6 +37,29 @@ router.get("/:id", async (req, res) => {
   }
 });
 
+// Get posts by a given user
+
+router.get("/:id/posts", async (req, res) => {
+  try {
+    let posts = await db.getUserPosts(req.params.id);
+    if (posts.length) {
+      res.status(200).json(posts);
+    } else {
+      res
+        .status(404)
+        .json({ error: true, message: "No posts found for that given user" });
+    }
+  } catch (error) {
+    console.log(error);
+    res
+      .status(500)
+      .json({
+        error: true,
+        message: " We are unable to find any posts for that user."
+      });
+  }
+});
+
 /// Create a new user
 
 router.post("/", async (req, res) => {
