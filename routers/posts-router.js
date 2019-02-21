@@ -69,4 +69,25 @@ router.delete("/:id", async (req, res) => {
   }
 });
 
+//Updates the post. Checked in Post man and it is working correctly :) Hoooray.
+router.put("/:id", async (req, res) => {
+  if (!req.body.text) {
+    res.status(400).json({ error: "Please provide text for the post" });
+    return;
+  }
+  try {
+    const post = await Posts.update(req.params.id, req.body);
+    if (post) {
+      res.status(200).json(post);
+    } else {
+      res.status(404).json({ message: "The post could not be found" });
+    }
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      message: "Error updating the post"
+    });
+  }
+});
+
 module.exports = router;
