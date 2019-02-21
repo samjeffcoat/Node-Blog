@@ -51,12 +51,10 @@ router.get("/:id/posts", async (req, res) => {
     }
   } catch (error) {
     console.log(error);
-    res
-      .status(500)
-      .json({
-        error: true,
-        message: " We are unable to find any posts for that user."
-      });
+    res.status(500).json({
+      error: true,
+      message: " We are unable to find any posts for that user."
+    });
   }
 });
 
@@ -93,6 +91,27 @@ router.delete("/:id", async (req, res) => {
   } catch (error) {
     console.log(error);
     res.status(500).json({ message: "There was an error removing that user!" });
+  }
+});
+
+//Needs to be able to update a given user
+
+router.put("/:id", async (req, res) => {
+  if (!req.body.name) {
+    res.status(400).json({ error: "Doh! The user must have a name" });
+    return;
+  }
+  try {
+    const user = await db.update(req.params.id, req.body);
+    if (user) {
+      res.status(200).json(user);
+    } else {
+      res.status(404).json({ message: "Oh, no! That user could not be found" });
+    }
+  } catch (error) {
+    res.status(500).json({
+      message: "Suffering, sucatash, there was an error updating that user!"
+    });
   }
 });
 
