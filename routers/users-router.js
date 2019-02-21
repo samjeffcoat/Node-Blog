@@ -3,6 +3,13 @@ const express = require("express");
 const db = require("../data/helpers/userDb");
 
 const router = express.Router();
+router.use(upperCaser);
+
+function upperCaser(req, res, next) {
+  const upperCaseName = (req.body.name || " ").toUpperCase();
+  req.body.name = upperCaseName;
+  next();
+}
 
 //get users
 
