@@ -6,7 +6,7 @@ const router = express.Router();
 
 //get users
 
-router.get("/", async (req, res) => {
+router.get("/", capitalize(), async (req, res) => {
   try {
     const users = await db.get();
     res.status(200).json(users);
@@ -60,7 +60,7 @@ router.get("/:id/posts", async (req, res) => {
 
 /// Create a new user
 
-router.post("/", async (req, res) => {
+router.post("/", capitalize(), async (req, res) => {
   if (!req.body.name) {
     res.status(400).json({ error: "Please provide a name for the user." });
     return;
@@ -96,7 +96,7 @@ router.delete("/:id", async (req, res) => {
 
 //Needs to be able to update a given user
 
-router.put("/:id", async (req, res) => {
+router.put("/:id", capitalize(), async (req, res) => {
   if (!req.body.name) {
     res.status(400).json({ error: "Doh! The user must have a name" });
     return;
@@ -115,4 +115,10 @@ router.put("/:id", async (req, res) => {
   }
 });
 
+function capitalize(name) {
+  return function(req, res, next) {
+    req.body.name = req.body.name.toUpperCase();
+    next();
+  };
+}
 module.exports = router;
