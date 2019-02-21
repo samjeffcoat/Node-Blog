@@ -58,4 +58,19 @@ router.post("/", async (req, res) => {
       .json({ error: "There was an error adding that user to your database!" });
   }
 });
+// deletes a user based on given id. as long as it is greater than 0 then it will be deleted. Successfully deleted a user
+router.delete("/:id", async (req, res) => {
+  try {
+    const count = await db.remove(req.params.id);
+    if (count > 0) {
+      res.status(200).json({ message: "That user has been nuked!" });
+    } else {
+      res.status(404).json({ message: "That user could not be found!" });
+    }
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: "There was an error removing that user!" });
+  }
+});
+
 module.exports = router;
